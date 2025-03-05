@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body {
+    background-color: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.clock {
+    font-size: 250px;
+    background-color: gray;
+    padding: 30px 50px;
+    border-radius: 15px;
+    margin: 0;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+.party_toggler,
+.DVD_spawn,
+.speedrun_mode {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 8px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+.party_toggler:hover,
+.DVD_spawn:hover,
+.speedrun_mode:hover {
+    transform: scale(1.05);
+}
+
+.party_toggler img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.DVD_spawn img {
+    width: 50px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.speedrun_mode img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .clock {
+        font-size: 120px;
+        padding: 20px 30px;
+    }
+
+    .buttons-container {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .DVD_spawn,
+    .speedrun_mode {
+        width: 100%;
+        justify-content: center;
+        font-size: 18px;
+        padding: 15px 25px;
+    }
+
+    .DVD_spawn img {
+        width: 40px;
+        height: 24px;
+    }
+
+    .speedrun_mode img {
+        width: 24px;
+        height: 24px;
+    }
+}
