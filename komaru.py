@@ -91,6 +91,7 @@ def party_mode(event):
     if party_mode_running:
         window.clearInterval(party_id)
         party_id = None  # Reset party_id to None
+        document.body.style.backgroundColor = "black"
         party_mode_running = False
     else:
         if party_id is None:  # Check if the interval is already running
