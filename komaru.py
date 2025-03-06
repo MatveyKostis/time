@@ -95,12 +95,10 @@ def party_mode(event):
         document.body.style.backgroundColor = "black"
         party_mode_running = False
     else:
-        if is_warned == False:
-            browser.alert("Warning: Do not use it if you're have epilepsy")
+        if not is_warned:
+            browser.alert("Warning: Do not use it if you have epilepsy")
             is_warned = True
             return
-        else:
-            pass
         if party_id is None:  # Check if the interval is already running
             party_id = window.setInterval(party_mode_run_with_setinterval, 100)
         party_mode_running = True
