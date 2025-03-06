@@ -24,15 +24,18 @@ body {
 }
 
 .clock {
-    font-size: min(15vw, 250px); /* Ограничение максимального размера */
+    font-size: clamp(50px, 15vw, 250px); /* Автоматический размер */
     background-color: gray;
     padding: 30px 50px;
     border-radius: 15px;
     margin: 0;
-    max-width: 80vw; /* Чтобы не упирался в края */
-    word-wrap: break-word; /* Перенос слов при необходимости */
-    overflow-wrap: break-word;
-    text-align: center; /* Центрирование текста */
+    max-width: 80vw; /* Ограничение по ширине */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap; /* Запрещает перенос строк */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Добавляет ... если не помещается */
 }
 
 .buttons-container {
