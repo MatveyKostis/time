@@ -89,15 +89,16 @@ def party_mode_run_with_setinterval():
 
 def party_mode(event):
     global party_mode_running, party_id, is_warned
+    
     if party_mode_running:
         window.clearInterval(party_id)
         party_id = None  # Reset party_id to None
         document.body.style.backgroundColor = "black"
-   else:
-        party_mode_running = False
+        party_mode_running = False  # Set to False after stopping
+    else:
         if party_id is None:  # Check if the interval is already running
             party_id = window.setInterval(party_mode_run_with_setinterval, 100)
-        party_mode_running = True
+            party_mode_running = True  # Set to True after starting
 
 def go_full_screen(event):
     global is_full_screen
