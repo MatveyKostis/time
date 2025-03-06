@@ -116,7 +116,7 @@ def spawn_logo(event):
         dvd_spawn_button.innerHTML = "Not enough money!"  # Меняем текст на сообщение об ошибке
 
         # Возвращаем предыдущий контент через 500 миллисекунд
-        timer.set_timeout(doing_that_when_answer_false, 500, previous_text)
+        timer.set_timeout(doing_that_when_answer_false, 5000, previous_text)
         return
     else:
         # Здесь код, если покупка успешна
