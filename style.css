@@ -18,6 +18,9 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 50px;
+    padding: 0 20px; /* Добавляем отступы слева и справа */
+    text-align: center;
+    max-width: 90vw; /* Ограничение ширины */
 }
 
 .clock {
@@ -26,13 +29,18 @@ body {
     padding: 30px 50px;
     border-radius: 15px;
     margin: 0;
+    max-width: 80vw; /* Чтобы не упирался в края */
+    word-wrap: break-word; /* Перенос слов при необходимости */
+    overflow-wrap: break-word;
 }
 
 .buttons-container {
     display: flex;
     gap: 30px;
     justify-content: center;
+    flex-wrap: wrap; /* Позволяет кнопкам переноситься на новую строку */
 }
+
 .party_toggler,
 .DVD_spawn,
 .speedrun_mode {
@@ -47,13 +55,16 @@ body {
     align-items: center;
     transition: transform 0.2s;
 }
+
 .party_toggler:hover,
 .DVD_spawn:hover,
 .speedrun_mode:hover {
     transform: scale(1.05);
 }
 
-.party_toggler img {
+.party_toggler img,
+.DVD_spawn img,
+.speedrun_mode img {
     width: 30px;
     height: 30px;
     margin-right: 10px;
@@ -62,13 +73,6 @@ body {
 .DVD_spawn img {
     width: 50px;
     height: 30px;
-    margin-right: 10px;
-}
-
-.speedrun_mode img {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
 }
 
 @media (max-width: 768px) {
