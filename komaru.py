@@ -97,7 +97,7 @@ def party_mode(event):
         party_mode_running = False  # Set to False after stopping
     else:
         if party_id is None:  # Check if the interval is already running
-            party_id = window.setInterval(party_mode_run_with_setinterval, 100)
+            party_id = window.setInterval(party_mode_run_with_setinterval, 1000)
             party_mode_running = True  # Set to True after starting
 
 def go_full_screen(event):
