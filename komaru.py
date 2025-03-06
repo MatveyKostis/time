@@ -29,6 +29,12 @@ class Money:
     def __init__(self):
         self.amount = 1
         self.last_clicked_time = datetime.now()
+        stored_money_is_ok = window.localStorage.getItem("money")
+        if stored_money_is_ok is not int:
+            if type(stored_money_is_ok) == str:
+                window.localStorage.setItem("money", int(stored_money_is_ok))
+            else:
+                window.localStorage.setItem("money", 0)
         stored_money = window.localStorage["money"]
         if stored_money is not int:
             if type(stored_money) == str:
