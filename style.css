@@ -143,3 +143,31 @@ body button {
         height: 24px;
     }
 }
+
+.remove_dvd {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 8px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.remove_dvd:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+.remove_dvd img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.dvd-logo {
+    transition: all 0.3s;
+}
