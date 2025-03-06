@@ -24,7 +24,7 @@ body {
 }
 
 .clock {
-    font-size: 250px;
+    font-size: min(15vw, 250px); /* Ограничение максимального размера */
     background-color: gray;
     padding: 30px 50px;
     border-radius: 15px;
@@ -32,6 +32,7 @@ body {
     max-width: 80vw; /* Чтобы не упирался в края */
     word-wrap: break-word; /* Перенос слов при необходимости */
     overflow-wrap: break-word;
+    text-align: center; /* Центрирование текста */
 }
 
 .buttons-container {
