@@ -1,39 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 body {
     background-color: black;
     color: white;
     margin: 0;
     padding: 0;
-    font-family: "Noto Sans", sans-serif;
-    min-height: 100vh;
+    min-height: 100vh; /* Используем min-height вместо height */
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Сохраняем column для вертикального расположения */
+    align-items: center; /* Центрирование по горизонтали */
+    font-family: "Noto Sans", sans-serif;
 }
 
-.shop_name{
+.shop_name {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%; /* Занимает всю ширину */
+    padding-top: 20px; /* Добавляем отступ сверху */
+    margin-bottom: auto; /* Это отодвинет следующие элементы вниз */
+}
+
+.button_buy {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: gray;
-    width: 100%;
-    height: 100px;
-    margin: 0;
-    padding: 0;
-    font-family: "Noto Sans", sans-serif;
-    font-size: 25px;
-    color: white;
-    text-align: center;
+    width: max-content;
+    margin: auto;
 }
-.Party_Buy {
-    background-color: #03857F;
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.party_speed{
+    background-color: gray;
     color: white;
-    border: none;
-    padding: 20px 40px;
-    font-size: 18px;
+    padding: 10px 20px;
     border-radius: 15px;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    align-items: center;
-    overflow: auto;
-    flex-direction: row;
+    margin: 0;
+}
+.dvd_buy {
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 0;
+}
+.go_back{
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 0;
+}
+.buy_party,
+.buy_dvd{
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 0;
 }

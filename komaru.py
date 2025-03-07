@@ -24,17 +24,36 @@ colors = [
     "gray", "silver", "maroon", "olive", "lime", "aqua", "fuchsia", "purple"
 ]
 
+class took_from_shop:
+    def __init__(self):
+        self.bought_dvd = window.localStorage.getItem("bought_dvd")
+        if self.bought_dvd == "true":
+            self.bought_dvd = True
+        else:
+            self.bought_dvd = False
+        window.localStorage["bought_dvd"] = self.bought_dvd
+        self.amount = window.localStorage.getItem("amount")
+        if self.amount is not int:
+            if type(self.amount) == str:
+                window.localStorage.setItem("amount", int(self.amount))
+            else:
+                window.localStorage.setItem("amount", 1)
+        self.amount = window.localStorage["amount"]
+shop = took_from_shop()
 
 class Money:
     def __init__(self):
-        self.amount = 1
+        self.amount = shop.amount
+        print(self.amount)
+        self.amount = int(shop.amount)
+        print(self.amount)
         self.last_clicked_time = datetime.now()
         stored_money_is_ok = window.localStorage.getItem("money")
         if stored_money_is_ok is not int:
             if type(stored_money_is_ok) == str:
                 window.localStorage.setItem("money", int(stored_money_is_ok))
             else:
-                window.localStorage.setItem("money", 0)
+                window.localStorage.setItem("money", 1)
         stored_money = window.localStorage["money"]
         if stored_money is not int:
             if type(stored_money) == str:
@@ -65,65 +84,11 @@ class Money:
 
 money = Money()
 
-
-class Buy_items:
-    def __init__(self):
-        self.items = [
-            ".DVD_spawn",
-            ".speedrun_mode",
-            ".party_toggler"
-        ]
-        self.item_prices = {
-            ".DVD_spawn": 100,
-            ".speedrun_mode": 2000,
-            ".party_toggler": 100
-        }
-
-    def try_buy_item(self, item):
-        if item in self.items:
-            if money.money >= self.item_prices[item]:
-                if item == ".DVD_spawn":
-                    money.money -= self.item_prices[item]
-                    self.item_prices[item] *= 2
-                    return True
-                elif item == ".speedrun_mode":
-                    money.money -= self.item_prices[item]
-                    return True
-                elif item == ".party_toggler":
-                    money.money -= self.item_prices[item]
-                    self.item_prices[item] *= 2
-                    return True
-            else:
-                return False
-
-    def show_buy_money(self):
-        pass
-
-
-buy_item = Buy_items()
-
-
 def spawn_logo(event):
-    def doing_that_when_answer_false(text):
-        # Восстановить текст кнопки и вернуть изображение
-        dvd_spawn_button.innerHTML = f'<img src="images/DVD.png" alt="DVD" class="button_img"> DVD spawn {money.return_money()}$'
-
-    # Попытка купить предмет
-    answer_from_button = buy_item.try_buy_item(".DVD_spawn")
-
-    # Если денег недостаточно
-    if answer_from_button == False:
-        # Сохраняем предыдущий текст кнопки
-        previous_text = dvd_spawn_button.innerHTML
-        dvd_spawn_button.innerHTML = "Not enough money!"  # Меняем текст на сообщение об ошибке
-
-        # Возвращаем предыдущий контент через 500 миллисекунд
-        timer.set_timeout(doing_that_when_answer_false, 5000, previous_text)
-        return
-    else:
-        # Здесь код, если покупка успешна
+    if shop.bought_dvd:
         pass
-
+    else:
+        return
     randomed_number = random.randint(0, 100)
     logo_element = html.DIV()
     logo_element.style.position = "absolute"
@@ -143,6 +108,7 @@ def spawn_logo(event):
     logo_pos_x = random.randint(0, window.innerWidth - 100)  # Начальная позиция по оси X
     logo_pos_y = random.randint(0, window.innerHeight - 50)  # Начальная позиция по оси Y
 
+
     def move_logo():
         nonlocal logo_pos_x, logo_pos_y, logo_speed_x, logo_speed_y
 
@@ -156,12 +122,10 @@ def spawn_logo(event):
 
         # Проверяем, не выходит ли логотип за пределы экрана
         if logo_pos_x <= 0 or logo_pos_x + 100 >= window_width:
-            money.money += money.amount  # 100px ширина логотипа
             logo_speed_x = -logo_speed_x  # Меняем направление по оси X
             logo_element.style.backgroundColor = random.choice(colors)  # Сменить цвет
 
         if logo_pos_y <= 0 or logo_pos_y + 50 >= window_height:
-            money.money += money.amount  # 50px высота логотипа
             logo_speed_y = -logo_speed_y  # Меняем направление по оси Y
             logo_element.style.backgroundColor = random.choice(colors)  # Сменить цвет
 
@@ -173,11 +137,14 @@ def spawn_logo(event):
 
 
 def init():
+    if shop.bought_dvd:
+        dvd_spawn_button.innerHTML = f'<img src="images/DVD.png" alt="DVD" class="button_img"> DVD spawn (BOUGHT)'
+    else:
+        dvd_spawn_button.innerHTML = f'<img src="images/DVD.png" alt="DVD" class="button_img"> DVD spawn (NOT BOUGHT)'
     clock_element.text = datetime.now().strftime("%H:%M:%S")
 
 
 def update_time():
-    dvd_spawn_button.innerHTML = f'<img src="images/DVD.png" alt="DVD" class="button_img"> DVD spawn {buy_item.item_prices[".DVD_spawn"]}$'
     if is_speedrun_enabled:
 
         clock_element.style.backgroundColor = "green"
