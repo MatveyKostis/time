@@ -30,8 +30,11 @@ class took_from_shop:
             self.amount = 0
             localstorage.setItem("amount", self.amount)
         self.amount = localstorage.getItem("amount")
-        self.party_time = localstorage.getint("party_time")
-        localstorage.setItem("party_time", self.party_time)
+        print(localstorage.getItem("party_speed"))
+        if localstorage.getItem("party_speed") == "[object Object]":
+            localstorage.setItem("party_speed", 1000)
+        self.party_time = localstorage.getint("party_speed")
+        localstorage.setItem("party_speed", self.party_time)
 shop = took_from_shop()
 
 class Money:

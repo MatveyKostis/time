@@ -64,6 +64,8 @@ def init():
 def buy_multiply_func(event):
     if localstorage.getint("money") >= localstorage.getint("price_of_multiply"):
         localstorage.setItem("amount", localstorage.getint("amount") * 2)
+        localstorage.setItem("money", localstorage.getint("money") - localstorage.getint("price_of_multiply"))
+        localstorage.setItem("bought_multiply_times", localstorage.getint("bought_multiply_times") + 1)
         localstorage.setItem("price_of_multiply", localstorage.getint("price_of_multiply") * 2)
     init()
 
