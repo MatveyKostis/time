@@ -1,23 +1,20 @@
-from browser import document, window, html, timer
-from datetime import datetime, timedelta
 import random
-import time
+from datetime import datetime, timedelta
+
+from browser import document, window, timer
+import browser
+from brython_colection import localstorage, html, timers
 
 is_full_screen = False
 party_mode_running = False
 party_id = None
-clock_element = document.querySelector('.clock')
-speedrun_button = document.querySelector('.speedrun_mode')
-party_button = document.querySelector('.party_toggler')
-shop_button = document.querySelector('.Shop_button')
-speedrun_bought = window.localStorage.getItem("speedrun_bought")
-if speedrun_bought is not bool:
-    if type(speedrun_bought) == bool:
-        speedrun_bought = False
-else:
-    speedrun_bought = bool(speedrun_bought)
-window.localStorage["speedrun_bought"] = speedrun_bought
-dvd_spawn_button = document.querySelector('.DVD_spawn')  # Кнопка для спавна логотипа
+clock_element = html.getElement('.clock')
+speedrun_button = html.getElement('.speedrun_mode')
+party_button = html.getElement('.party_toggler')
+shop_button = html.getElement('.Shop_button')
+speedrun_bought = localstorage.getboolean("speedrun_bought")
+localstorage.setItem("speedrun_bought", speedrun_bought)
+dvd_spawn_button = html.getElement('.DVD_spawn')
 is_speedrun_enabled = False
 colors = [
     "black", "white", "red", "green", "blue", "yellow", "cyan", "magenta",
@@ -26,19 +23,15 @@ colors = [
 
 class took_from_shop:
     def __init__(self):
-        self.bought_dvd = window.localStorage.getItem("bought_dvd")
-        if self.bought_dvd == "true":
-            self.bought_dvd = True
-        else:
-            self.bought_dvd = False
-        window.localStorage["bought_dvd"] = self.bought_dvd
-        self.amount = window.localStorage.getItem("amount")
-        if self.amount is not int:
-            if type(self.amount) == str:
-                window.localStorage.setItem("amount", int(self.amount))
-            else:
-                window.localStorage.setItem("amount", 1)
-        self.amount = window.localStorage["amount"]
+        self.bought_dvd = localstorage.getboolean("bought_dvd")
+        localstorage.setItem("bought_dvd", self.bought_dvd)
+        self.amount = localstorage.getint("amount")
+        if self.amount < 0:
+            self.amount = 0
+            localstorage.setItem("amount", self.amount)
+        self.amount = localstorage.getItem("amount")
+        self.party_time = localstorage.getint("party_time")
+        localstorage.setItem("party_time", self.party_time)
 shop = took_from_shop()
 
 class Money:
@@ -48,24 +41,11 @@ class Money:
         self.amount = int(shop.amount)
         print(self.amount)
         self.last_clicked_time = datetime.now()
-        stored_money_is_ok = window.localStorage.getItem("money")
-        if stored_money_is_ok is not int:
-            if type(stored_money_is_ok) == str:
-                window.localStorage.setItem("money", int(stored_money_is_ok))
-            else:
-                window.localStorage.setItem("money", 1)
-        stored_money = window.localStorage["money"]
-        if stored_money is not int:
-            if type(stored_money) == str:
-                stored_money = int(stored_money)
-            else:
-                stored_money = 0
-        else:
-            stored_money = int(stored_money)
+        stored_money = localstorage.getint("money")
         self.money = stored_money
 
     def save_money(self):
-        window.localStorage.setItem("money", str(self.money))
+        localstorage.setItem("money", self.money)
 
     def return_money(self):
         return self.money
@@ -77,7 +57,7 @@ class Money:
             self.save_money()
 
     def show_on_text_money(self):
-        money_element = document.querySelector('.money_show')
+        money_element = html.getElement('.money_show')
         if money_element:
             money_element.textContent = f'TimeCoins: {self.return_money()}'
 
@@ -90,7 +70,7 @@ def spawn_logo(event):
     else:
         return
     randomed_number = random.randint(0, 100)
-    logo_element = html.DIV()
+    logo_element = browser.html.DIV()
     logo_element.style.position = "absolute"
     logo_element.style.width = "100px"
     logo_element.style.height = "50px"
@@ -137,6 +117,8 @@ def spawn_logo(event):
 
 
 def init():
+    party_lol = html.getElement('.party_lol')
+    party_lol.innerHTML = f'Party time: {localstorage.getint("party_speed")}ms'
     if shop.bought_dvd:
         dvd_spawn_button.innerHTML = f'<img src="images/DVD.png" alt="DVD" class="button_img"> DVD spawn (BOUGHT)'
     else:
@@ -158,13 +140,12 @@ def update_time():
 
 def enable_speed_run(event):
     global is_speedrun_enabled
-    if speedrun_bought:
-        if is_speedrun_enabled:
-            clock_element.style.backgroundColor = "green"
-            is_speedrun_enabled = False
-        else:
-            clock_element.style.backgroundColor = "gray"
-            is_speedrun_enabled = True
+    if is_speedrun_enabled:
+        clock_element.style.backgroundColor = "green"
+        is_speedrun_enabled = False
+    else:
+        clock_element.style.backgroundColor = "gray"
+        is_speedrun_enabled = True
 
 
 def party_mode_run_with_setinterval():
@@ -183,7 +164,7 @@ def party_mode(event):
         party_mode_running = False  # Set to False after stopping
     else:
         if party_id is None:  # Check if the interval is already running
-            party_id = window.setInterval(party_mode_run_with_setinterval, 1000)
+            party_id = window.setInterval(party_mode_run_with_setinterval, localstorage.getint("party_speed"))
             party_mode_running = True  # Set to True after starting
 
 
