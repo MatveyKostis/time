@@ -51,6 +51,13 @@ a {
     border-radius: 15px;
     margin: 0;
 }
+.Multiply{
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 0;
+}
 .go_back{
     background-color: gray;
     color: white;
@@ -58,6 +65,7 @@ a {
     border-radius: 15px;
     margin: 0;
 }
+.Multiply{
 .buy_party,
 .buy_dvd{
     background-color: gray;

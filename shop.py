@@ -19,6 +19,7 @@ class Money_shop():
 
 buy_dvd_button = html.getElement('.buy_dvd')
 buy_party_button = html.getElement('.buy_party')
+buy_multiply = html.getElement('.buy_multiply')
 bought_dvd = localstorage.getboolean("bought_dvd")
 bought_party_times = localstorage.getint("bought_party_times")
 bought_party_or_no = html.getElement('.bought_party_or_no')
@@ -27,6 +28,10 @@ if localstorage.getint("party_speed") is None:
 print(localstorage.getint("party_speed"))
 if localstorage.getint("price_of_party") is None:
     localstorage.setItem("price_of_party", 1000)
+if localstorage.getint("price_of_multiply") is None:
+    localstorage.setItem("price_of_multiply", 5000)
+if localstorage.getint("bought_multiply_times") is None:
+    localstorage.setItem("bought_multiply_times", 0)
 print(localstorage.getint("price_of_party"))
 localstorage.setItem("bought_party_times", bought_party_times)
 localstorage.setItem("bought_dvd", bought_dvd)
@@ -41,12 +46,26 @@ def init():
     print(bought_party_times)
     price_of_party = html.getElement(".price_of_party")
     price_of_party.text = f"Cost: {localstorage.getint('price_of_party')} $"
+    price_of_multiply = html.getElement(".price_of_multiply")
+    price_of_multiply.text = f"Cost: {localstorage.getint('price_of_multiply')} $"
+    multiply_bought = html.getElement(".multiply_bought")
+    multiply_bought.text = f"Bought: {localstorage.getint('bought_multiply_times')} times"
+    if localstorage.getint("bought_party_times") >= 1:
+        bought_party_or_no.text = f"Bought: {localstorage.getint('bought_party_times')} times"
+    elif localstorage.getint("bought_party_times") <= 0:
+        bought_party_or_no.text = "Bought: No"
     if bought_party_times >= int(1):
         bought_party_or_no.text = f"Bought: {localstorage.getint('bought_party_times')} times"
     elif int(bought_party_times) == 0:
         bought_party_or_no.text = "Bought: No"
     else:
         bought_party_or_no.text = "How the fu you even did that!?"
+
+def buy_multiply_func(event):
+    if localstorage.getint("money") >= localstorage.getint("price_of_multiply"):
+        localstorage.setItem("amount", localstorage.getint("amount") * 2)
+        localstorage.setItem("price_of_multiply", localstorage.getint("price_of_multiply") * 2)
+    init()
 
 def buy_party_button_func(event):
     global party_speed
@@ -75,7 +94,9 @@ def buy_dvd_button_func(event):
             bought_dvd_text.text = "Bought: No"
             timers.set_timeout_seconds(init, 1)
     else:
-        bought_dvd_text.text = "Bought: Yes"
+        bought_dvd_text.text = "Already bought!"
+        timers.set_timeout_seconds(init, 1)
 init()
 buy_dvd_button.bind("click", buy_dvd_button_func)
 buy_party_button.bind("click", buy_party_button_func)
+buy_multiply.bind("click", buy_multiply_func)
