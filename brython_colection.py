@@ -82,7 +82,10 @@ class LocalStorage:
         """
         if self.checkItem(item) is not True:
             return None
-        return int(window.localStorage.getItem(item))
+        value = window.localStorage.getItem(item)
+        if value is None or value == "[object Object]":
+            return 0
+        return int(value)
 
     def getfloat(self, item: str) -> float:
         """

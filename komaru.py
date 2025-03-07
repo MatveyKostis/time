@@ -26,8 +26,12 @@ class took_from_shop:
         self.bought_dvd = localstorage.getboolean("bought_dvd")
         localstorage.setItem("bought_dvd", self.bought_dvd)
         self.amount = localstorage.getint("amount")
+        print(self.amount)
+        if self.amount is None:
+            self.amount = 1
+            localstorage.setItem("amount", self.amount)
         if self.amount < 0:
-            self.amount = 0
+            self.amount = 1
             localstorage.setItem("amount", self.amount)
         self.amount = localstorage.getItem("amount")
         print(localstorage.getItem("party_speed"))

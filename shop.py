@@ -21,6 +21,9 @@ buy_dvd_button = html.getElement('.buy_dvd')
 buy_party_button = html.getElement('.buy_party')
 buy_multiply = html.getElement('.buy_multiply')
 bought_dvd = localstorage.getboolean("bought_dvd")
+if localstorage.getboolean("bought_party_times") == "[object Object]":
+    localstorage.setItem("bought_party_times", 1)
+print(localstorage.getItem("bought_party_times"))
 bought_party_times = localstorage.getint("bought_party_times")
 bought_party_or_no = html.getElement('.bought_party_or_no')
 if localstorage.getint("party_speed") is None:
@@ -50,11 +53,12 @@ def init():
     price_of_multiply.text = f"Cost: {localstorage.getint('price_of_multiply')} $"
     multiply_bought = html.getElement(".multiply_bought")
     multiply_bought.text = f"Bought: {localstorage.getint('bought_multiply_times')} times"
+    print(localstorage.getItem("bought_party_times"))
     if localstorage.getint("bought_party_times") >= 1:
         bought_party_or_no.text = f"Bought: {localstorage.getint('bought_party_times')} times"
     elif localstorage.getint("bought_party_times") <= 0:
         bought_party_or_no.text = "Bought: No"
-    if bought_party_times >= int(1):
+    if bought_party_times >= 1:
         bought_party_or_no.text = f"Bought: {localstorage.getint('bought_party_times')} times"
     elif int(bought_party_times) == 0:
         bought_party_or_no.text = "Bought: No"
