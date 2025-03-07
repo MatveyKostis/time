@@ -68,8 +68,8 @@ def buy_dvd_button_func(event):
             window.localStorage["amount"] = money_lol
             init()
         else:
-            bought_dvd_text.text = f"Not enough money: {int(money.amount) - 250}"
-            timer.set_timeout(init, 1000)
+            bought_dvd_text.text = "Bought: No"
+            timer.time_out(init, 1000)
     else:
         bought_dvd_text.text = "Bought: Yes"
 init()
