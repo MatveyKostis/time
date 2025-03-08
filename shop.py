@@ -44,6 +44,7 @@ buy_speedrun = html.getElement('.buy_speedrun')
 bought_dvd_text = html.getElement(".bought_dvd_or_no")
 bought_party_or_no = html.getElement('.bought_party_or_no')
 bought_speedrun_text = html.getElement('.speedrun_bought')
+money_show_text = html.getElement('.money_show')
 
 # Получение состояния покупок
 bought_dvd = localstorage.get_bool("bought_dvd")
@@ -71,7 +72,7 @@ def init():
 
     multiply_bought = localstorage.get_int("bought_multiply_times")
     html.setText(".multiply_bought", f"Bought: {multiply_bought} times")
-
+    money_show_text.text = f"{localstorage.get_int('money')} $"
     if localstorage.get_bool("speedrun_bought"):
         html.setText(".speedrun_bought", "Bought: Yes")
     else:
@@ -130,10 +131,18 @@ def buy_party_button_func(event):
 
 def buy_speedrun_func(event):
     if localstorage.get_int("money") >= 2500:
+        if localstorage.get_bool("speedrun_bought"):
+            html.setText(".speedrun_bought", "Bought: Yes")
+            timers.set_timeout_seconds(init, 1)
+            return
         localstorage.set("money", localstorage.get_int("money") - 2500)
         localstorage.set("speedrun_bought", True)
         init()
     else:
+        if localstorage.get_bool("speedrun_bought"):
+            html.setText(".speedrun_bought", "Bought: Yes")
+            timers.set_timeout_seconds(init, 1)
+            return
         html.setText(".speedrun_bought", "Not enough money!")
         timers.set_timeout_seconds(init, 1)
 

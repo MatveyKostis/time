@@ -179,15 +179,15 @@ def enable_speed_run(event):
     is_speedrun_enabled = not is_speedrun_enabled
 
     if is_speedrun_enabled:
-        clock_element.style.backgroundColor = "green"
+        clock_element.style.background = "green"
     else:
-        clock_element.style.backgroundColor = "gray"
+        clock_element.style.background = "linear-gradient(145deg, #2a2a2a, #333333)"
 
 
 def party_mode_run_with_setinterval():
     global party_mode_running
     color = random.choice(colors)
-    document.body.style.backgroundColor = color
+    document.body.style.background = color
 
 
 def party_mode(event):
@@ -196,7 +196,7 @@ def party_mode(event):
     if party_mode_running:
         window.clearInterval(party_id)
         party_id = None  # Reset party_id to None
-        document.body.style.backgroundColor = "black"
+        document.body.style.background = "linear-gradient(135deg, var(--primary-bg), var(--secondary-bg))"
         party_mode_running = False  # Set to False after stopping
     else:
         if party_id is None:  # Check if the interval is already running
