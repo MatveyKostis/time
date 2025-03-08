@@ -19,21 +19,6 @@ class Money_shop():
         localstorage.set("party_time", self.party_time)
 
 
-class JSON_work():
-    def __init__(self):
-        json_data = {
-            "bought_dvd": localstorage.get_bool("bought_dvd", False),
-            "bought_party_times": localstorage.get_int("bought_party_times", 0),
-            "bought_multiply_times": localstorage.get_int("bought_multiply_times", 0),
-            "party_speed": localstorage.get_int("party_speed", 1000),
-            "price_of_party": localstorage.get_int("price_of_party", 1000),
-            "price_of_multiply": localstorage.get_int("price_of_multiply", 5000)
-        }
-        localstorage.set("game_data", json_data)
-
-    def show_json(self):
-        print(localstorage.get("game_data"))
-
 
 # Инициализация localStorage для игры
 localstorage.set_storage("KomaruTimeGame")
@@ -50,8 +35,6 @@ localstorage.get_or_create("speedrun_bought", False)
 
 
 # Инициализация JSON структуры
-json_lol = JSON_work()
-json_lol.show_json()
 
 # Получение элементов интерфейса
 buy_dvd_button = html.getElement('.buy_dvd')
