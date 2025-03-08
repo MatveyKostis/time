@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
+
+
 body {
     background-color: black;
     color: white;
@@ -51,6 +53,13 @@ a {
     border-radius: 15px;
     margin: 0;
 }
+.speedrun{
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 0;
+}
 .Multiply{
     background-color: gray;
     color: white;
@@ -65,7 +74,15 @@ a {
     border-radius: 15px;
     margin: 0;
 }
-.Multiply{
+.button_buy button{
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 0;
+}
+.speedrun,
+.Multiply,
 .buy_party,
 .buy_dvd{
     background-color: gray;
