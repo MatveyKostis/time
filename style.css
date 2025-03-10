@@ -203,6 +203,21 @@ body button {
     left: 100%;
 }
 
+.cheat-alert{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: black;
+    width: 25%;
+    height: 15%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 2em;
+}
+
 .Shop_button:hover,
 .party_toggler:hover,
 .DVD_spawn:hover,
@@ -249,72 +264,8 @@ body button {
     height: 30px;
 }
 
-/* Dark mode toggle - Can be added as a new feature */
-.dark-mode-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(30, 30, 30, 0.7);
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all var(--transition-speed);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-}
 
-.dark-mode-toggle:hover {
-    transform: rotate(45deg);
-    background: var(--accent-color);
-}
 
-@media (max-width: 768px) {
-    .clock {
-        font-size: 120px;
-        padding: 20px 30px;
-    }
-
-    .buttons-container {
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-        padding: 0 20px;
-    }
-
-    .Shop_button,
-    .party_toggler,
-    .DVD_spawn,
-    .speedrun_mode {
-        width: 100%;
-        justify-content: center;
-        font-size: 18px;
-        padding: 15px 25px;
-        min-width: unset;
-    }
-
-    .DVD_spawn img {
-        width: 40px;
-        height: 24px;
-    }
-
-    .speedrun_mode img {
-        width: 24px;
-        height: 24px;
-    }
-
-    .main-container {
-        gap: 30px;
-        padding: 30px 15px;
-    }
-
-    .money_show {
-        padding: 20px 30px;
-    }
-}
 
 /* Animations for page elements */
 @keyframes pulse {
@@ -327,14 +278,4 @@ body button {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
     100% { transform: translateY(0px); }
-}
-
-/* Optional: Add animations to specific elements */
-.animated-element {
-    animation: float 4s ease-in-out infinite;
-}
-
-/* Optional: Add this class to get a pulsing effect */
-.pulse-animation {
-    animation: pulse 2s infinite;
 }

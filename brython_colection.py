@@ -2,6 +2,7 @@ from browser import document, window, html, timer
 from datetime import datetime, timedelta
 import json
 import random
+from typing import Optional
 import time
 
 
@@ -354,25 +355,29 @@ class HTML_Elements:
         :return: None
         """
         document.querySelector(query).textContent = text
-    def removeElement(self, query: str) -> None:
+
+    def createElement(self, tag: str, text: str, src: Optional[str] = None,
+                      class_ok: Optional[str] = None) -> 'Element':
         """
-        Removing an element from a given query
-        :param query: A query (like a class that starting from ".", or a id that starting from "#")
-        :return: None
-        """
-        document.querySelector(query).remove()
-    def createElement(self, tag: str, text: str, src = None) -> None:
-        """
-        Creating an element from a given tag
-        :param tag: A tag of the element
-        :param text: A text to be set
-        :param src: A source (if needed)
-        :return: Element
+        Create an element with the given tag, text, and optional attributes src and class.
+
+        :param tag: The tag of the element
+        :param text: The text to be set
+        :param src: The source (if needed, e.g., for an image)
+        :param class_ok: The class (if needed)
+        :return: The element
         """
         element = document.createElement(tag)
+
+        if class_ok:
+            element.className = class_ok
+
         element.textContent = text
+
         if src:
             element.src = src
+
+        document.body.appendChild(element)
         return element
     def addStyle(self, name: str, value: str, id_class: str):
         """
@@ -390,6 +395,15 @@ class HTML_Elements:
         :return: Element
         """
         return document.querySelector(query)
+
+    def removeElement(self, query: str) -> None:
+        """
+        Removing an element from a given query
+        :param query: A query (like a class that starting from ".", or a id that starting from "#")
+        :return: None
+        """
+        document.querySelector(query).remove()
+        document.body.removeChild(self.getElement(query))
     def setHTML(self, query: str, html: str) -> None:
         """
         Setting a html to a given query
@@ -434,8 +448,10 @@ class Timers:
 
         :param func: The function to be called.
         :param seconds: The number of seconds between each function call.
+        :return interval, which can be used to clear the interval
         """
-        window.setInterval(func, seconds * 1000)
+        interval = window.setInterval(func, seconds * 1000)
+        return interval
 
     def set_interval_minutes(self, func, minutes: int):
         """
@@ -443,8 +459,10 @@ class Timers:
 
         :param func: The function to be called.
         :param minutes: The number of minutes between each function call.
+        :return interval, which can be used to clear the interval
         """
-        window.setInterval(func, minutes * 60 * 1000)
+        interval = window.setInterval(func, minutes * 60 * 1000)
+        return interval
 
     def set_interval_hours(self, func, hours: int):
         """
@@ -452,10 +470,105 @@ class Timers:
 
         :param func: The function to be called.
         :param hours: The number of hours between each function call.
+        :return interval, which can be used to clear the interval
         """
-        window.setInterval(func, hours * 60 * 60 * 1000)
+        interval = window.setInterval(func, hours * 60 * 60 * 1000)
+        return interval
+
+    def clear_interval(self, interval):
+        """
+        clearing an interval
+        :param interval:
+        :return: nothing
+        """
+        if interval == None:
+            return None
+        window.clearInterval(interval)
+
+    def set_timeout_decorator(self, type, time: int):
+        """
+        Creating interval through decorator
+
+        :param type:
+        :param time:
+        :return: nothing
+        """
+        def decorator(func):
+            def wrapper(*args, **kwargs):
+                if args or kwargs:
+                    return func(*args, **kwargs)
+                else:
+                    return func()
+
+            if type == "seconds":
+                self.set_timeout_seconds(wrapper, time)
+            elif type == "minutes":
+                self.set_timeout_minutes(wrapper, time)
+            elif type == "hours":
+                self.set_timeout_hours(wrapper, time)
+            return wrapper
+
+        return decorator
+
+    def set_interval_decorator(self, type, time: int):
+        """
+        Creating interval through decorator
+
+        :param type:
+        :param time:
+        :return: nothing
+        """
+        def decorator(func):
+            def wrapper(*args, **kwargs):
+                if args or kwargs:
+                    return func(*args, **kwargs)
+                else:
+                    return func()
+
+            if type == "seconds":
+                self.set_interval_seconds(wrapper, time)
+            elif type == "minutes":
+                self.set_interval_minutes(wrapper, time)
+            elif type == "hours":
+                self.set_interval_hours(wrapper, time)
+            return wrapper
+
+        return decorator
+
+class Bind:
+    def __init__(self):
+        pass
+
+    def bind(self, query, event_name):
+        """
+        binding a function to an event (for example, a click)
+        :param query:
+        :param event_name:
+        :return:
+        """
+        def decorator(func):
+            html.getElement(query).bind(event_name, func)
+            return func
+
+        return decorator
+
+    def keyboard_reaction(self):
+        """
+        Returning a keyboard pressed key, through decorator
+        :return: key
+        """
+        def decorator(func):
+            def wrapper(event):
+                key = event.key
+                func(key)
+
+            window.addEventListener("keydown", wrapper)
+            return func
+
+        return decorator
 
 
 localstorage = LocalStorageManager()
 html = HTML_Elements()
 timers = Timers()
+bind = Bind()

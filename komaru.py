@@ -3,30 +3,39 @@ from datetime import datetime, timedelta
 
 from browser import document, window
 import browser
-from brython_colection import localstorage, html, timers
+from brython_colection import localstorage, html, timers, bind
 
-localstorage.set_storage("KomaruTimeGame")
 
-# Инициализация настроек игры при первом запуске
-localstorage.get_or_create("speedrun_bought", False)
-localstorage.get_or_create("bought_dvd", False)
-localstorage.get_or_create("amount", 1)
-localstorage.get_or_create("party_speed", 1000)
-localstorage.get_or_create("money", 0)
-localstorage.get_or_create("party_time", 1000)
-localstorage.get_or_create("bought_party_times", 0)
-localstorage.get_or_create("bought_multiply_times", 0)
-localstorage.get_or_create("price_of_party", 1000)
-localstorage.get_or_create("price_of_multiply", 5000)
+class Save_Control:
+    def __init__(self):
+        localstorage.set_storage("KomaruTimeGame")
 
-# Глобальные переменные состояния
+    def load_save(self):
+        localstorage.get_or_create("speedrun_bought", False)
+        localstorage.get_or_create("bought_dvd", False)
+        localstorage.get_or_create("amount", 1)
+        localstorage.get_or_create("party_speed", 1000)
+        localstorage.get_or_create("money", 0)
+        localstorage.get_or_create("party_time", 1000)
+        localstorage.get_or_create("bought_party_times", 0)
+        localstorage.get_or_create("bought_multiply_times", 0)
+        localstorage.get_or_create("price_of_party", 1000)
+        localstorage.get_or_create("price_of_multiply", 5000)
+
+
+save_control = Save_Control()
+save_control.load_save()
 is_full_screen = False
 party_mode_running = False
 party_id = None
+time_komaru = 1
 is_speedrun_enabled = False
 
+buffer = ""
+interval_timer = None
 # Получение элементов интерфейса
 clock_element = html.getElement('.clock')
+money_element = html.getElement('.money_show')
 speedrun_button = html.getElement('.speedrun_mode')
 party_button = html.getElement('.party_toggler')
 shop_button = html.getElement('.Shop_button')
@@ -62,7 +71,7 @@ shop = ShopManager()
 class Money:
     def __init__(self):
         self.amount = shop.amount
-        self.last_clicked_time = datetime.now()
+        self.last_add_money = datetime.now()
         self.money = localstorage.get_int("money")
 
     def save_money(self):
@@ -72,20 +81,41 @@ class Money:
         return self.money
 
     def add_money(self):
-        if datetime.now() > self.last_clicked_time + timedelta(seconds=1):
-            self.money += self.amount
-            self.last_clicked_time = datetime.now()
-            self.save_money()
+        self.money += self.amount
+        self.last_add_money = datetime.now()
+        self.save_money()
 
     def show_on_text_money(self):
-        money_element = html.getElement('.money_show')
         if money_element:
             html.setText('.money_show', f'TimeCoins: {self.return_money()}')
 
 
 money = Money()
 
+@timers.set_interval_decorator("seconds", 1)
+def do_operation_with_money():
+    money.add_money()
+    money.show_on_text_money()
+    money.save_money()
 
+def delete_cheat_activated():
+    for element in document.getElementsByClassName("cheat-alert"):
+        element.remove()
+
+@bind.keyboard_reaction()
+def key_buffer(key):
+    global buffer
+    print(key, buffer)
+    buffer += key
+    buffer = buffer[-10:]
+
+    if "hesoyam" in buffer.lower():
+        html.createElement("DIV", "CHEAT ACTIVATED", class_ok="cheat-alert")
+        money.money += 250000
+        timers.set_timeout_seconds(delete_cheat_activated, 3)
+        buffer = ""
+
+@bind.bind(".DVD_spawn", "click")
 def spawn_logo(event):
     if not localstorage.get_bool("bought_dvd"):
         return
@@ -97,9 +127,14 @@ def spawn_logo(event):
     logo_element.style.height = "50px"
     if randomed_number == 68:
         logo_element.style.backgroundImage = "url('images/komaru.png')"
+    elif randomed_number == 90:
+        logo_element.style.backgroundImage = "url('images/ralseiphoto.png')"
     else:
         logo_element.style.backgroundImage = "url('images/DVD.png')"
-    logo_element.style.backgroundSize = "contain"
+    if randomed_number == 90:
+        logo_element.style.backgroundSize = "100% 100%"
+    else:
+        logo_element.style.backgroundSize = "contain"
     logo_element.style.backgroundRepeat = "no-repeat"
     document.body.appendChild(logo_element)
 
@@ -133,7 +168,7 @@ def spawn_logo(event):
         logo_element.style.left = f"{logo_pos_x}px"
         logo_element.style.top = f"{logo_pos_y}px"
 
-    window.setInterval(move_logo, 10)  # Начинаем движение логотипа
+    timers.set_interval_seconds(move_logo, 0.01)  # Начинаем движение логотипа
 
 
 def init():
@@ -153,21 +188,23 @@ def init():
     html.setText('.clock', datetime.now().strftime("%H:%M:%S"))
 
 
+def update_time_speedrun():
+    milliseconds = datetime.now().strftime('%f')
+    milliseconds = int(milliseconds) // 1000
+    html.setText('.clock', datetime.now().strftime(f"%H:%M:%S:{milliseconds}"))
+
+
+@timers.set_interval_decorator("seconds", 0.4)
 def update_time():
     global is_speedrun_enabled
 
-    if is_speedrun_enabled:
-        clock_element.style.backgroundColor = "green"
-        milliseconds = datetime.now().strftime('%f')
-        milliseconds = int(milliseconds) // 1000
-        html.setText('.clock', datetime.now().strftime(f"%H:%M:%S:{milliseconds}"))
-    else:
+    if not is_speedrun_enabled:
         html.setText('.clock', datetime.now().strftime("%H:%M:%S"))
-        clock_element.style.backgroundColor = "gray"
+        clock_element.style.background = "linear-gradient(145deg, #2a2a2a, #333333)"
 
-
+@bind.bind(".speedrun_mode", "click")
 def enable_speed_run(event):
-    global is_speedrun_enabled
+    global is_speedrun_enabled, interval_timer
 
     # Проверяем, куплен ли speedrun режим
     if not localstorage.get_bool("speedrun_bought"):
@@ -180,8 +217,10 @@ def enable_speed_run(event):
 
     if is_speedrun_enabled:
         clock_element.style.background = "green"
+        interval_timer = timers.set_interval_seconds(update_time_speedrun, 0.02)
     else:
         clock_element.style.background = "linear-gradient(145deg, #2a2a2a, #333333)"
+        timers.clear_interval(interval_timer)
 
 
 def party_mode_run_with_setinterval():
@@ -189,7 +228,7 @@ def party_mode_run_with_setinterval():
     color = random.choice(colors)
     document.body.style.background = color
 
-
+@bind.bind('.party_lol', 'click')
 def party_mode(event):
     global party_mode_running, party_id
 
@@ -203,7 +242,7 @@ def party_mode(event):
             party_id = window.setInterval(party_mode_run_with_setinterval, localstorage.get_int("party_speed"))
             party_mode_running = True  # Set to True after starting
 
-
+@bind.bind('.clock', 'click')
 def go_full_screen(event):
     global is_full_screen
     if is_full_screen:
@@ -216,15 +255,3 @@ def go_full_screen(event):
 
 # Инициализация
 init()
-
-# Привязка событий к элементам
-dvd_spawn_button.bind("click", spawn_logo)
-speedrun_button.bind("click", enable_speed_run)
-clock_element.bind("click", go_full_screen)
-party_button.bind("click", party_mode)
-
-# Устанавливаем интервалы для обновления времени и деньг
-timers.set_interval_seconds(update_time, 0.01)  # Эквивалент 10мс
-timers.set_interval_seconds(money.show_on_text_money, 0.01)
-timers.set_interval_seconds(money.save_money, 0.01)
-timers.set_interval_seconds(money.add_money, 0.01)
