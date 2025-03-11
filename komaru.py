@@ -34,6 +34,7 @@ is_speedrun_enabled = False
 buffer = ""
 interval_timer = None
 # Получение элементов интерфейса
+useless_button = html.getElement('.useless_button')
 clock_element = html.getElement('.clock')
 money_element = html.getElement('.money_show')
 speedrun_button = html.getElement('.speedrun_mode')
@@ -216,6 +217,8 @@ def spawn_logo(event):
 
 
 def init():
+    useless_button.style.left = f"{random.randint(0, window.innerWidth - 100)}px"
+    useless_button.style.top = f"{random.randint(0, window.innerHeight - 50)}px"
     party_lol = html.getElement('.party_lol')
     html.setHTML('.party_lol', f'Party time: {localstorage.get_int("party_speed")}ms')
 
@@ -285,6 +288,11 @@ def party_mode(event):
         if party_id is None:  # Check if the interval is already running
             party_id = window.setInterval(party_mode_run_with_setinterval, localstorage.get_int("party_speed"))
             party_mode_running = True  # Set to True after starting
+
+@bind.bind('.useless_button', 'click')
+def useless_button_func(event):
+    useless_button.style.left = f"{random.randint(0, window.innerWidth - 100)}px"
+    useless_button.style.top = f"{random.randint(0, window.innerHeight - 50)}px"
 
 @bind.bind('.clock', 'click')
 def go_full_screen(event):
