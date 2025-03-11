@@ -78,12 +78,13 @@ body{
     width: auto;
 }
 
-.buy_multiply,
-.buy_speedrun,
-.buy_party,
-.buy_dvd:hover{
+.buy_multiply:hover,
+.buy_speedrun:hover,
+.buy_party:hover,
+.buy_dvd:hover {
     background: #414243;
 }
+
 
 .go_back_lol{
     background: white;

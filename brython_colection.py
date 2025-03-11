@@ -568,6 +568,7 @@ class Bind:
         return decorator
 
 
+
 localstorage = LocalStorageManager()
 html = HTML_Elements()
 timers = Timers()

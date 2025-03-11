@@ -161,6 +161,11 @@ body button {
     margin-top: 20px;
 }
 
+.brython-dialog-main{
+    color: black;
+    border-radius: 5px;
+}
+
 .Shop_button,
 .party_toggler,
 .DVD_spawn,

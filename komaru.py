@@ -73,9 +73,12 @@ class Money:
         self.amount = shop.amount
         self.last_add_money = datetime.now()
         self.money = localstorage.get_int("money")
+        self.last_login_time = localstorage.get_or_create("last_login_time", datetime.now().isoformat())
+        self.calculate_offline_earnings()
 
     def save_money(self):
         localstorage.set("money", self.money)
+        localstorage.set("last_login_time", datetime.now().isoformat())
 
     def return_money(self):
         return self.money
@@ -85,18 +88,45 @@ class Money:
         self.last_add_money = datetime.now()
         self.save_money()
 
+    def calculate_offline_earnings(self):
+        try:
+            # Convert stored ISO format string back to datetime
+            last_login = datetime.fromisoformat(self.last_login_time)
+            current_time = datetime.now()
+
+            # Calculate time difference in seconds
+            time_diff = (current_time - last_login).total_seconds()
+
+            # Calculate earnings (at 50% efficiency of online earnings)
+            offline_rate = 0.5  # 50% efficiency rate
+            offline_earnings = int(time_diff * self.amount * offline_rate)
+
+            # Cap the maximum offline earnings (e.g., 24 hours worth)
+            max_offline_seconds = 24 * 60 * 60  # 24 hours in seconds
+            max_earnings = int(max_offline_seconds * self.amount * offline_rate)
+
+            if offline_earnings > max_earnings:
+                offline_earnings = max_earnings
+
+            # Add the offline earnings to the current money
+            if offline_earnings > 0:
+                self.money += offline_earnings
+                self.save_money()
+        except Exception as e:
+            print(f"Error calculating offline earnings: {e}")
+
+
     def show_on_text_money(self):
         if money_element:
             html.setText('.money_show', f'TimeCoins: {self.return_money()}')
 
-
 money = Money()
-
 @timers.set_interval_decorator("seconds", 1)
 def do_operation_with_money():
     money.add_money()
     money.show_on_text_money()
     money.save_money()
+
 
 def delete_cheat_activated():
     for element in document.getElementsByClassName("cheat-alert"):
