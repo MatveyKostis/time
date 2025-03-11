@@ -14,6 +14,7 @@ class Save_Control():
         localstorage.get_or_create("party_speed", 1000)
         localstorage.get_or_create("first_button", 0)
         localstorage.get_or_create("ralsei_amount", 0)
+        localstorage.get_or_create("price_of_ralsei", 2500)
         localstorage.get_or_create("price_of_party", 1000)
         localstorage.get_or_create("price_of_multiply", 5000)
         localstorage.get_or_create("money", 0)
@@ -47,6 +48,7 @@ money_show_text = html.getElement('.money_show')
 
 first_button = ["DVD", "Ralsei Photo"]
 
+
 bought_dvd = localstorage.get_bool("bought_dvd")
 bought_party_times = localstorage.get_int("bought_party_times")
 bought_speedrun = localstorage.get_bool("speedrun_bought")
@@ -66,10 +68,13 @@ def update_text():
         html.setHTML(".first_button_h3", "Ralsei photo in DVD & x2<img src='images/ralseiphoto.png' style='height: 20px'>")
         html.setHTML(".buy_dvd", "BUY RALSEI <img src='images/ralseiphoto.png', style='height: 50px'>")
         html.setHTML(".cost_first", "Cost 2500$")
-        if localstorage.get_int("ralsei_amount") >= 1:
-            html.setText(".bought_dvd_or_no", "Bought times: " + str(localstorage.get_int("ralsei_amount")))
+        if localstorage.get_int("ralsei_amount") == 5:
+            html.setText(".bought_dvd_or_no", "Bought: Yes, " + str(localstorage.get_int("ralsei_amount") * 10) + "%")
+        elif localstorage.get_int("ralsei_amount") >= 1:
+            text = f"Bought times: {localstorage.get_int('ralsei_amount')} ({localstorage.get_int('ralsei_amount') * 10}%)"
+            html.setText(".bought_dvd_or_no", text)
         else:
-            html.setText(".bought_dvd_or_no", "Bought times: " + str(localstorage.get_int("ralsei_amount")))
+            html.setText(".bought_dvd_or_no", "Bought: No")
 
     price_of_party = localstorage.get_int("price_of_party")
     html.setText(".price_of_party", f"Cost: {price_of_party} $")
@@ -161,12 +166,18 @@ def buy_speedrun_func(event):
 def buy_dvd_button_func(event):
     if localstorage.get_int("first_button") == 1:
         is_bought = localstorage.get_int("ralsei_amount")
-        if localstorage.get_int("money") >= 2500:
+        if localstorage.get_int("money") >= localstorage.get_int("price_of_ralsei"):
+            if localstorage.get_int("ralsei_amount") >= 5:
+                localstorage.set("ralsei_amount", 5)
+                update_text()
+                return
             localstorage.set("money", localstorage.get_int("money") - 2500)
             localstorage.set("ralsei_amount", localstorage.get_int("ralsei_amount") + 1)
-            html.setText(".bought_dvd_or_no", "Bought times:" + localstorage.get_int("ralsei_amount"))
+            localstorage.set("price_of_ralsei". localstorage.get_int("price_of_ralsei") * 2)
+            html.setText(".bought_dvd_or_no", "Bought times:" + localstorage.get_int("ralsei_amount"), f" ({localstorage.get_int('price_of_ralsei') * 10}%)")
         else:
             html.setText(".bought_dvd_or_no", "Not enough money!")
+        update_text()
     else:
         is_bought = localstorage.get_bool("bought_dvd")
 

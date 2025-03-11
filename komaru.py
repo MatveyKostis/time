@@ -127,11 +127,25 @@ def spawn_logo(event):
     logo_element.style.height = "50px"
     if randomed_number == 68:
         logo_element.style.backgroundImage = "url('images/komaru.png')"
-    elif randomed_number == 90:
-        logo_element.style.backgroundImage = "url('images/ralseiphoto.png')"
     else:
         logo_element.style.backgroundImage = "url('images/DVD.png')"
-    if randomed_number == 90:
+    if localstorage.get_int("ralsei_amount") == 1:
+        if randomed_number <= 10:
+            logo_element.style.backgroundImage = "url('images/ralseiphoto.png')"
+    elif localstorage.get_int("ralsei_amount") == 2:
+        if randomed_number <= 20:
+            logo_element.style.backgroundImage = "url('images/ralseiphoto.png')"
+    elif localstorage.get_int("ralsei_amount") == 3:
+        if randomed_number <= 30:
+            logo_element.style.backgroundImage = "url('images/ralseiphoto.png')"
+    elif localstorage.get_int("ralsei_amount") == 4:
+        if randomed_number <= 40:
+            logo_element.style.backgroundImage = "url('images/ralseiphoto.png')"
+    elif localstorage.get_int("ralsei_amount") == 5:
+        if randomed_number <= 50:
+            logo_element.style.backgroundImage = "url('images/ralseiphoto.png')"
+
+    if localstorage.get_int("ralsei_amount") >= 1:
         logo_element.style.backgroundSize = "100% 100%"
     else:
         logo_element.style.backgroundSize = "contain"
