@@ -567,9 +567,197 @@ class Bind:
 
         return decorator
 
+class Input_Handle:
+    def __init__(self):
+        pass
 
+    def handle_checkbox(self, query):
+        """
+        Returning a checkbox value, through decorator
+        :return: boolean (True/False)
+        """
+        def decorator(func):
+            def wrapper(event):
+                value = event.target.checked
+                func(value)
 
+            html.getElement(query).addEventListener("change", wrapper)
+            return func
+
+        return decorator
+
+    def handle_input(self, query):
+        """
+        Returning an input value, through decorator
+        :return: string value
+        """
+        def decorator(func):
+            def wrapper(event):
+                value = event.target.value
+                func(value)
+
+            html.getElement(query).addEventListener("input", wrapper)
+            return func
+
+        return decorator
+
+    def handle_select(self, query):
+        """
+        Returning a select value, through decorator
+        :return: string value
+        """
+        def decorator(func):
+            def wrapper(event):
+                value = event.target.value
+                func(value)
+
+            html.getElement(query).addEventListener("change", wrapper)
+            return func
+
+        return decorator
+
+    def handle_button(self, query):
+        """
+        Returning a button value, through decorator
+        :return: string value or None
+        """
+        def decorator(func):
+            def wrapper(event):
+                value = event.target.value if hasattr(event.target, 'value') else None
+                func(value)
+
+            html.getElement(query).addEventListener("click", wrapper)
+            return func
+
+        return decorator
+
+    def handle_submit(self, query):
+        """
+        Handling form submission, through decorator
+        :return: event object
+        """
+        def decorator(func):
+            def wrapper(event):
+                event.preventDefault()
+                func(event)
+
+            html.getElement(query).addEventListener("submit", wrapper)
+            return func
+
+        return decorator
+
+    def handle_reset(self, query):
+        """
+        Handling form reset, through decorator
+        :return: event object
+        """
+        def decorator(func):
+            def wrapper(event):
+                func(event)
+
+            html.getElement(query).addEventListener("reset", wrapper)
+            return func
+
+        return decorator
+
+    def handle_text(self, query):
+        """
+        Returning a text value, through decorator
+        :return: string value
+        """
+        def decorator(func):
+            def wrapper(event):
+                value = event.target.value
+                func(value)
+
+            html.getElement(query).addEventListener("input", wrapper)
+            return func
+
+        return decorator
+
+    def handle_email(self, query):
+        """
+        Returning a email value, through decorator
+        :return: string value
+        """
+        def decorator(func):
+            def wrapper(event):
+                value = event.target.value
+                func(value)
+
+            html.getElement(query).addEventListener("input", wrapper)
+            return func
+
+        return decorator
+
+class Brython_etc:
+    def __init__(self):
+        """
+        A class containing miscellaneous Brython functions
+
+        Note that this class is not meant to be instantiated.
+        """
+        pass
+
+    def redirect(self, url):
+        """
+        Redirects the user to a given URL
+
+        :param url: The URL to redirect to
+        """
+        window.location.href = url
+
+    def alert(self, message):
+        """
+        Displays an alert box with the given message
+
+        :param message: The message to be displayed
+        """
+        window.alert(message)
+
+    def ask(self, message):
+        """
+        Displays a confirmation dialog box with the given message
+        and returns True if the user clicks OK, False if the user clicks Cancel
+
+        :param message: The message to be displayed
+        :return: boolean (True/False)
+        """
+        return window.confirm(message)
+
+    def prompt(self, message):
+        """
+        Displays a prompt dialog box with the given message
+        and returns the value input by the user
+
+        :param message: The message to be displayed
+        :return: string value
+        """
+        return window.prompt(message)
+
+    def open(self, url=None):
+        """
+        Opens a new window with the given URL
+
+        If no URL is given, opens a new window with a link to the rickroll
+
+        :param url: The URL to open (optional)
+        """
+        if url is None:
+            window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        else:
+            window.open(url)
+
+    def get_window_size(self):
+        """
+        Returns the size of the window
+
+        :return: tuple (width, height)
+        """
+        return window.innerWidth, window.innerHeight
 localstorage = LocalStorageManager()
 html = HTML_Elements()
 timers = Timers()
+input_handle = Input_Handle()
 bind = Bind()
+brython_etc = Brython_etc()
